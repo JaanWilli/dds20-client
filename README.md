@@ -1,5 +1,3 @@
-# SoPra FS20 - Client Template
-
 ## Getting started with React
 
 Read and go through those Tutorials, It will make your life easier!
@@ -59,6 +57,3 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## Learn More
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-
->Thanks to Lucas Pelloni for the template
