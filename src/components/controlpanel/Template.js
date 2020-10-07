@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import User from '../shared/models/User';
-import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
+import React from "react";
+import styled from "styled-components";
+import { BaseContainer } from "../../helpers/layout";
+import { api, handleError } from "../../helpers/api";
+import User from "../shared/models/User";
+import { Button } from "../../views/design/Button";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -32,7 +31,7 @@ const Form = styled.div`
 
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: rgba(255, 255, 255, 1);
   }
   height: 35px;
   padding-left: 15px;
@@ -65,7 +64,7 @@ const ButtonContainer = styled.div`
  * https://reactjs.org/docs/react-component.html
  * @Class
  */
-class Login extends React.Component {
+class ControlPanel extends React.Component {
   /**
    * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
    * The constructor for a React component is called before it is mounted (rendered).
@@ -76,7 +75,7 @@ class Login extends React.Component {
     super();
     this.state = {
       name: null,
-      username: null
+      username: null,
     };
   }
   /**
@@ -88,15 +87,15 @@ class Login extends React.Component {
     try {
       const requestBody = JSON.stringify({
         username: this.state.username,
-        name: this.state.name
+        name: this.state.name,
       });
-      const response = await api.post('/users', requestBody);
+      const response = await api.post("/users", requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
       // Store the token into the local storage.
-      localStorage.setItem('token', user.token);
+      localStorage.setItem("token", user.token);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       this.props.history.push(`/game`);
@@ -133,15 +132,15 @@ class Login extends React.Component {
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
-              onChange={e => {
-                this.handleInputChange('username', e.target.value);
+              onChange={(e) => {
+                this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Name</Label>
             <InputField
               placeholder="Enter here.."
-              onChange={e => {
-                this.handleInputChange('name', e.target.value);
+              onChange={(e) => {
+                this.handleInputChange("name", e.target.value);
               }}
             />
             <ButtonContainer>
@@ -166,4 +165,4 @@ class Login extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(Login);
+export default ControlPanel;
