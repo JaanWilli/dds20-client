@@ -1,9 +1,15 @@
 import React, { Component } from "react";
+import { Button } from "semantic-ui-react";
 
 class ControlPanel extends Component {
   state = {};
   render() {
-    return <h>Control Panel</h>;
+    return (
+      <div>
+        <h>Control Panel</h>
+        <Button>Test</Button>;
+      </div>
+    );
   }
 }
 
