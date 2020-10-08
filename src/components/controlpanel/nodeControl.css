@@ -1,0 +1,13 @@
+.nodeControl {
+  float: left;
+  width: 300px;
+  height: 100%;
+  min-height: 650px;
+  margin: 10px;
+  border: 2px #3d4061 solid;
+  border-radius: 3px;
+}
+
+.nodeControl h3 {
+  padding: 2px;
+}
