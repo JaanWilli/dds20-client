@@ -8,6 +8,26 @@ class NodeControl extends Component {
     nodeId: this.props.nodeId,
     active: false,
     dieAfter: "prepare",
+    logitems: [
+      {
+        id: 5,
+        message: "prepare",
+        procId: 4,
+        transId: 4,
+        coordId: 5,
+        subordinate: [1, 2],
+        isStatus: false,
+      },
+      {
+        id: 5,
+        message: "The node is doing cool things",
+        procId: null,
+        transId: null,
+        coordId: null,
+        subordinate: null,
+        isStatus: true,
+      },
+    ],
   };
 
   async setNodeSettings(active, dieAfter) {
@@ -26,10 +46,15 @@ class NodeControl extends Component {
 
   async getNodeData() {
     //get status
-    const response = await api.get("/status");
-    this.setState({ active: response.active, dieAfter: response.dieAfter });
+    const statusResponse = await api.get("/status");
+    this.setState({
+      active: statusResponse.active,
+      dieAfter: statusResponse.dieAfter,
+    });
 
     //get log infos
+    const logResponse = await api.get("/info");
+    this.setState({ logitems: logResponse.logs });
   }
 
   render() {
@@ -68,7 +93,7 @@ class NodeControl extends Component {
           <Button>Flag3</Button>
         </div>
 
-        <Log />
+        <Log logitems={this.state.logitems} />
       </div>
     );
   }

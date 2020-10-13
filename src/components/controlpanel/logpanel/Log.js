@@ -4,27 +4,11 @@ import { api, handleError } from "../../../helpers/api";
 
 class Log extends Component {
   state = {
-    logitems: [
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-      "Abort",
-      "Commit",
-    ],
+    logitems: this.props.logitems,
   };
 
   async componentDidMount() {
+    console.log(this.props.logitems);
     // try {
     //   const response = await api.get("/info");
     //   this.setState({ logitems: response.logs });
@@ -39,17 +23,25 @@ class Log extends Component {
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Log</Table.HeaderCell>
+              <Table.HeaderCell>Message</Table.HeaderCell>
+              <Table.HeaderCell>ProcId</Table.HeaderCell>
+              <Table.HeaderCell>TransId</Table.HeaderCell>
+              <Table.HeaderCell>CoordId</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {this.state.logitems.map((item) => {
-              return (
-                <Table.Row>
-                  <Table.Cell>{item}</Table.Cell>
-                </Table.Row>
-              );
-            })}
+            {this.state.logitems
+              ? this.state.logitems.map((item) => {
+                  return (
+                    <Table.Row active={!item.isStatus}>
+                      <Table.Cell>{item.message}</Table.Cell>
+                      <Table.Cell>{item.procId}</Table.Cell>
+                      <Table.Cell>{item.transId}</Table.Cell>
+                      <Table.Cell>{item.coordId}</Table.Cell>
+                    </Table.Row>
+                  );
+                })
+              : ""}
           </Table.Body>
         </Table>
       </div>
