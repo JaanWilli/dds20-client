@@ -98,7 +98,7 @@ class NodeControl extends Component {
             <Icon name="redo alternate"></Icon>
           </Button>
           <Button
-            onClick={() => this.setNodeSettings(!this.state.active, null)}
+            onClick={() => this.setNodeSettings(!this.state.active, "never")}
             icon
           >
             <Icon name="power off" />
