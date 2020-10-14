@@ -6,6 +6,7 @@ import { api, handleError } from "../../helpers/api";
 class NodeControl extends Component {
   state = {
     nodeId: this.props.nodeId,
+    coordinator: this.props.coordinator,
     active: false,
     dieAfter: "prepare",
     logitems: [
@@ -29,6 +30,15 @@ class NodeControl extends Component {
       },
     ],
   };
+
+  async startTransaction() {
+    console.log("The transaction starts");
+    // try {
+    //   const response = await api.post("/?");
+    // } catch (error) {
+    //   alert(`Something went wrong: \n${handleError(error)}`);
+    // }
+  }
 
   async setNodeSettings(active, dieAfter) {
     const requestBody = JSON.stringify({
@@ -60,7 +70,11 @@ class NodeControl extends Component {
   render() {
     return (
       <div className="nodeControl">
-        <h3>Subordinate {this.state.nodeId}</h3>
+        {this.state.coordinator ? (
+          <h3>Coordinator</h3>
+        ) : (
+          <h3>Subordinate {this.state.nodeId}</h3>
+        )}
         <div className="statusSection">
           {this.state.active ? (
             <Label as="a" color="green" tag>
@@ -79,19 +93,31 @@ class NodeControl extends Component {
             ""
           )}
         </div>
-        <div className="buttonSection">
-          <Button onClick={() => this.getNodeData()} icon>
-            <Icon name="redo alternate"></Icon>
-          </Button>
-          <Button
-            onClick={() => this.setNodeSettings(!this.state.active, null)}
-            icon
-          >
-            <Icon name="power off" />
-          </Button>
-          <Button>Flag2</Button>
-          <Button>Flag3</Button>
-        </div>
+        {this.state.coordinator ? (
+          <div className="buttonSection">
+            <Button onClick={() => this.getNodeData()} icon>
+              <Icon name="redo alternate"></Icon>
+            </Button>
+            <Button onClick={() => this.startTransaction()}>
+              Start Transaction
+            </Button>
+            <Button>Flag1</Button>
+          </div>
+        ) : (
+          <div className="buttonSection">
+            <Button onClick={() => this.getNodeData()} icon>
+              <Icon name="redo alternate"></Icon>
+            </Button>
+            <Button
+              onClick={() => this.setNodeSettings(!this.state.active, null)}
+              icon
+            >
+              <Icon name="power off" />
+            </Button>
+            <Button>Flag2</Button>
+            <Button>Flag3</Button>
+          </div>
+        )}
 
         <Log logitems={this.state.logitems} />
       </div>
