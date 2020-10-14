@@ -93,31 +93,31 @@ class NodeControl extends Component {
             ""
           )}
         </div>
-        {this.state.coordinator ? (
-          <div className="buttonSection">
-            <Button onClick={() => this.getNodeData()} icon>
-              <Icon name="redo alternate"></Icon>
-            </Button>
-            <Button onClick={() => this.startTransaction()}>
-              Start Transaction
-            </Button>
-            <Button>Flag1</Button>
-          </div>
-        ) : (
-          <div className="buttonSection">
-            <Button onClick={() => this.getNodeData()} icon>
-              <Icon name="redo alternate"></Icon>
-            </Button>
-            <Button
-              onClick={() => this.setNodeSettings(!this.state.active, null)}
-              icon
-            >
-              <Icon name="power off" />
-            </Button>
-            <Button>Flag2</Button>
-            <Button>Flag3</Button>
-          </div>
-        )}
+        <div className="buttonSection">
+          <Button onClick={() => this.getNodeData()} icon>
+            <Icon name="redo alternate"></Icon>
+          </Button>
+          <Button
+            onClick={() => this.setNodeSettings(!this.state.active, null)}
+            icon
+          >
+            <Icon name="power off" />
+          </Button>
+          {this.state.coordinator ? (
+            <div className="coordinatorSpecific">
+              <Button onClick={() => this.startTransaction()} icon>
+                <Icon name="cloud upload"></Icon>
+              </Button>
+              <Button>Die after sending prepare</Button>
+              <Button>Die after sending commit/abort</Button>
+            </div>
+          ) : (
+            <div className="subordinateSpecific">
+              <Button>Flag2</Button>
+              <Button>Flag3</Button>
+            </div>
+          )}
+        </div>
 
         <Log logitems={this.state.logitems} />
       </div>
