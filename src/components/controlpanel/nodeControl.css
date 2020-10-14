@@ -26,3 +26,7 @@
 .buttonSection .subordinateSpecific {
   float: right;
 }
+
+.ui.tag.label {
+  cursor: default;
+}

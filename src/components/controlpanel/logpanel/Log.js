@@ -13,7 +13,6 @@ class Log extends Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Message</Table.HeaderCell>
-              <Table.HeaderCell>ProcId</Table.HeaderCell>
               <Table.HeaderCell>TransId</Table.HeaderCell>
               <Table.HeaderCell>CoordId</Table.HeaderCell>
             </Table.Row>
@@ -24,7 +23,6 @@ class Log extends Component {
                   return (
                     <Table.Row active={!item.isStatus}>
                       <Table.Cell>{item.message}</Table.Cell>
-                      <Table.Cell>{item.procId}</Table.Cell>
                       <Table.Cell>{item.transId}</Table.Cell>
                       <Table.Cell>{item.coordId}</Table.Cell>
                     </Table.Row>

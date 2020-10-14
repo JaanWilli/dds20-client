@@ -8,21 +8,21 @@ class NodeControl extends Component {
     nodeId: this.props.nodeId,
     coordinator: this.props.coordinator,
     active: false,
-    dieAfter: "prepare",
+    dieAfter: "never",
     logitems: [
       {
         id: 5,
         message: "prepare",
-        procId: 4,
+        node: 4,
         transId: 4,
         coordId: 5,
-        subordinate: [1, 2],
+        subordinate: ["123.456.788", "123.456.788"],
         isStatus: false,
       },
       {
         id: 5,
         message: "The node is doing cool things",
-        procId: null,
+        node: null,
         transId: null,
         coordId: null,
         subordinate: null,
@@ -32,12 +32,12 @@ class NodeControl extends Component {
   };
 
   async startTransaction() {
-    console.log("The transaction starts");
-    // try {
-    //   const response = await api.post("/?");
-    // } catch (error) {
-    //   alert(`Something went wrong: \n${handleError(error)}`);
-    // }
+    console.log("API POST /start");
+    try {
+      await api.post("/start");
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+    }
   }
 
   async setNodeSettings(active, dieAfter) {
@@ -46,7 +46,7 @@ class NodeControl extends Component {
       dieAfter: dieAfter,
     });
 
-    console.log(active, dieAfter);
+    console.log("API POST /settings", requestBody);
     try {
       await api.post("/settings", requestBody);
     } catch (error) {
@@ -56,15 +56,28 @@ class NodeControl extends Component {
 
   async getNodeData() {
     //get status
-    const statusResponse = await api.get("/status");
-    this.setState({
-      active: statusResponse.active,
-      dieAfter: statusResponse.dieAfter,
-    });
+    console.log("API GET /status");
+    try {
+      const statusResponse = await api.get("/status");
+      console.log("Response: ", statusResponse);
+      console.log(statusResponse.data.active);
+      this.setState({
+        active: statusResponse.data.active,
+        dieAfter: statusResponse.data.dieAfter,
+      });
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+    }
 
     //get log infos
-    const logResponse = await api.get("/info");
-    this.setState({ logitems: logResponse.logs });
+    console.log("API GET /info");
+    try {
+      const logResponse = await api.get("/info");
+      console.log("Response: ", logResponse);
+      this.setState({ logitems: logResponse.data.logs });
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+    }
   }
 
   render() {
@@ -85,7 +98,7 @@ class NodeControl extends Component {
               Inactive
             </Label>
           )}
-          {this.state.dieAfter ? (
+          {this.state.dieAfter !== "never" ? (
             <Label as="a" color="black" tag>
               die after: {this.state.dieAfter}
             </Label>
@@ -94,27 +107,52 @@ class NodeControl extends Component {
           )}
         </div>
         <div className="buttonSection">
-          <Button onClick={() => this.getNodeData()} icon>
-            <Icon name="redo alternate"></Icon>
-          </Button>
           <Button
             onClick={() => this.setNodeSettings(!this.state.active, "never")}
             icon
           >
             <Icon name="power off" />
           </Button>
+          <Button onClick={() => this.getNodeData()} icon>
+            <Icon name="redo alternate"></Icon>
+          </Button>
           {this.state.coordinator ? (
             <div className="coordinatorSpecific">
-              <Button onClick={() => this.startTransaction()} icon>
-                <Icon name="cloud upload"></Icon>
+              <Button
+                onClick={() => this.startTransaction()}
+                disabled={!this.state.active}
+                icon
+              >
+                <Icon name="play"></Icon>
               </Button>
-              <Button>Die after sending prepare</Button>
-              <Button>Die after sending commit/abort</Button>
+              <Button
+                onClick={() =>
+                  this.setNodeSettings(this.state.active, "prepare")
+                }
+                disabled={!this.state.active}
+              >
+                Die after sending prepare
+              </Button>
+              <Button
+                onClick={() =>
+                  this.setNodeSettings(this.state.active, "commit/abort")
+                }
+                disabled={!this.state.active}
+              >
+                Die after sending commit/abort
+              </Button>
             </div>
           ) : (
             <div className="subordinateSpecific">
-              <Button>Flag2</Button>
-              <Button>Flag3</Button>
+              <Button
+                onClick={() =>
+                  this.setNodeSettings(this.state.active, "yes/no")
+                }
+                disabled={!this.state.active}
+              >
+                Die after sending yes/no
+              </Button>
+              <Button disabled={!this.state.active}>Flag3</Button>
             </div>
           )}
         </div>
