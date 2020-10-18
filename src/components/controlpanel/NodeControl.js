@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Label, Icon } from "semantic-ui-react";
 import Log from "./logpanel/Log";
-import { api, handleError } from "../../helpers/api";
+import { apiPost, apiGet, handleError } from "../../helpers/api";
 
 class NodeControl extends Component {
   state = {
@@ -34,7 +34,7 @@ class NodeControl extends Component {
   async startTransaction() {
     console.log("API POST /start");
     try {
-      await api.post("/start");
+      await apiPost(this.state.nodeId, "/start");
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
     }
@@ -48,7 +48,7 @@ class NodeControl extends Component {
 
     console.log("API POST /settings", requestBody);
     try {
-      await api.post("/settings", requestBody);
+      await apiPost(this.state.nodeId, "/settings", requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
     }
@@ -59,7 +59,7 @@ class NodeControl extends Component {
     //get status
     console.log("API GET /status");
     try {
-      const statusResponse = await api.get("/status");
+      const statusResponse = await apiGet(this.state.nodeId, "/status");
       console.log("Response: ", statusResponse);
       console.log(statusResponse.data.active);
       this.setState({
@@ -73,7 +73,7 @@ class NodeControl extends Component {
     //get log infos
     console.log("API GET /info");
     try {
-      const logResponse = await api.get("/info");
+      const logResponse = await apiGet(this.state.nodeId, "/info");
       console.log("Response: ", logResponse);
       this.setState({ logitems: logResponse.data.logs });
     } catch (error) {

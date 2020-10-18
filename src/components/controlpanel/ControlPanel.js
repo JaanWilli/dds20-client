@@ -7,10 +7,9 @@ class ControlPanel extends Component {
     return (
       <div>
         <h1>Control Panel</h1>
-        <NodeControl coordinator={true} />
-        <NodeControl nodeId={1} coordinator={false} />
-        <NodeControl nodeId={2} coordinator={false} />
-        <NodeControl nodeId={3} coordinator={false} />
+        <NodeControl nodeId={80} coordinator={true} />
+        <NodeControl nodeId={85} coordinator={false} />
+        <NodeControl nodeId={90} coordinator={false} />
       </div>
     );
   }

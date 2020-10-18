@@ -1,10 +1,26 @@
 import axios from "axios";
 import { getDomain } from "./getDomain";
 
-export const api = axios.create({
-  baseURL: getDomain(),
-  headers: { "Content-Type": "application/json" },
-});
+// export const api = axios.create({
+//   baseURL: getDomain(),
+//   headers: { "Content-Type": "application/json" },
+// });
+
+export async function apiPost(node, path, data) {
+  const promise = await axios.post(`${getDomain()}${node}${path}`, data, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+  return promise;
+}
+
+export async function apiGet(node, path) {
+  const promise = await axios.get(`${getDomain()}${node}${path}`, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+  return promise;
+}
 
 export const handleError = (error) => {
   const response = error.response;
