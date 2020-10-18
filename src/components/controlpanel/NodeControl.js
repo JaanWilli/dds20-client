@@ -6,7 +6,11 @@ import { apiPost, apiGet, handleError } from "../../helpers/api";
 class NodeControl extends Component {
   state = {
     nodeId: this.props.nodeId,
+    isCoordinator: this.props.isCoordinator,
+    isSubordinate: this.props.isSubordinate,
+    subordinates: this.props.subordinates,
     coordinator: this.props.coordinator,
+
     active: false,
     dieAfter: "never",
     logitems: [
@@ -30,6 +34,26 @@ class NodeControl extends Component {
       },
     ],
   };
+
+  componentDidMount() {
+    this.setup();
+  }
+
+  async setup() {
+    const requestBody = JSON.stringify({
+      isCoordinator: this.state.isCoordinator,
+      isSubordinate: this.state.isSubordinate,
+      subordinates: this.state.subordinates,
+      coordinator: this.state.coordinator,
+    });
+
+    console.log("API POST /setup", requestBody);
+    try {
+      await apiPost(this.state.nodeId, "/setup", requestBody);
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+    }
+  }
 
   async startTransaction() {
     console.log("API POST /start");
@@ -84,10 +108,10 @@ class NodeControl extends Component {
   render() {
     return (
       <div className="nodeControl">
-        {this.state.coordinator ? (
-          <h3>Coordinator</h3>
+        {this.state.isCoordinator ? (
+          <h3>Coordinator ({this.state.nodeId})</h3>
         ) : (
-          <h3>Subordinate {this.state.nodeId}</h3>
+          <h3>Subordinate ({this.state.nodeId})</h3>
         )}
         <div className="statusSection">
           {this.state.active ? (
