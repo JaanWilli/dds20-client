@@ -41,6 +41,7 @@ class NodeControl extends Component {
 
   async setup() {
     const requestBody = JSON.stringify({
+      node: this.state.nodeId,
       isCoordinator: this.state.isCoordinator,
       isSubordinate: this.state.isSubordinate,
       subordinates: this.state.subordinates,
