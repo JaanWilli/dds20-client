@@ -141,7 +141,7 @@ class NodeControl extends Component {
           <Button onClick={() => this.getNodeData()} icon>
             <Icon name="redo alternate"></Icon>
           </Button>
-          {this.state.coordinator ? (
+          {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
               <Button
                 onClick={() => this.startTransaction()}
