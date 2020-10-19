@@ -9,25 +9,25 @@ class ControlPanel extends Component {
       <div>
         <h1>Control Panel</h1>
         <NodeControl
-          nodeId={getDomain() + 80}
+          nodeId={getDomain() + 1}
           isCoordinator={true}
           isSubordinate={false}
-          subordinates={[`${getDomain()}${85}`, `${getDomain}${90}`]}
+          subordinates={[`${getDomain()}${2}`, `${getDomain}${3}`]}
           coordinator={""}
         />
         <NodeControl
-          nodeId={getDomain() + 85}
+          nodeId={getDomain() + 2}
           isCoordinator={false}
           isSubordinate={true}
           subordinates={[]}
-          coordinator={`${getDomain()}${80}`}
+          coordinator={`${getDomain()}${1}`}
         />
         <NodeControl
-          nodeId={getDomain() + 90}
+          nodeId={getDomain() + 3}
           isCoordinator={false}
           isSubordinate={true}
           subordinates={[]}
-          coordinator={`${getDomain()}${80}`}
+          coordinator={`${getDomain()}${1}`}
         />
       </div>
     );
