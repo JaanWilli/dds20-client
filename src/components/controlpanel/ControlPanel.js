@@ -12,7 +12,7 @@ class ControlPanel extends Component {
           nodeId={getDomain() + 1}
           isCoordinator={true}
           isSubordinate={false}
-          subordinates={[`${getDomain()}${2}`, `${getDomain}${3}`]}
+          subordinates={[`${getDomain()}2`, `${getDomain()}3`]}
           coordinator={""}
         />
         <NodeControl
@@ -20,14 +20,14 @@ class ControlPanel extends Component {
           isCoordinator={false}
           isSubordinate={true}
           subordinates={[]}
-          coordinator={`${getDomain()}${1}`}
+          coordinator={`${getDomain()}1`}
         />
         <NodeControl
           nodeId={getDomain() + 3}
           isCoordinator={false}
           isSubordinate={true}
           subordinates={[]}
-          coordinator={`${getDomain()}${1}`}
+          coordinator={`${getDomain()}1`}
         />
       </div>
     );
