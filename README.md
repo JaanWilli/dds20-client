@@ -1,4 +1,9 @@
-## Prerequisites and Installation
+# 2PL Control Panel
+An own implementation of the 2PL Protocol by Davide Fontanella, Jan Willi & Remy Egloff for the UZH course "Distributed Database Systems DDBS20"
+
+Link: https://dds20-client.herokuapp.com/
+
+## Development
 
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
 
