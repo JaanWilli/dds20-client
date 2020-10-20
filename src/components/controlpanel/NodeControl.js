@@ -19,6 +19,9 @@ class NodeControl extends Component {
   componentDidMount() {
     this.setup();
     this.getNodeData();
+    setInterval(() => {
+      this.getNodeData();
+    }, 2500);
   }
 
   async setup() {
@@ -68,7 +71,6 @@ class NodeControl extends Component {
     try {
       const statusResponse = await apiGet(this.state.nodeId, "/status");
       console.log("Response: ", statusResponse);
-      console.log(statusResponse.data.active);
       this.setState({
         active: statusResponse.data.active,
         dieAfter: statusResponse.data.dieAfter,
@@ -120,9 +122,6 @@ class NodeControl extends Component {
             icon
           >
             <Icon name="power off" />
-          </Button>
-          <Button onClick={() => this.getNodeData()} icon>
-            <Icon name="redo alternate"></Icon>
           </Button>
           {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
