@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 
 class Log extends Component {
-  state = {
-    logitems: this.props.logitems,
-  };
+  state = {};
 
   render() {
     return (
@@ -18,8 +16,8 @@ class Log extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {this.state.logitems
-              ? this.state.logitems.map((item) => {
+            {this.props.logitems
+              ? this.props.logitems.map((item) => {
                   return (
                     <Table.Row active={!item.isStatus}>
                       <Table.Cell>{item.message}</Table.Cell>

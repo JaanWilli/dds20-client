@@ -13,30 +13,12 @@ class NodeControl extends Component {
 
     active: false,
     dieAfter: "never",
-    logitems: [
-      {
-        id: 5,
-        message: "prepare",
-        node: 4,
-        transId: 4,
-        coordId: 5,
-        subordinate: ["123.456.788", "123.456.788"],
-        isStatus: false,
-      },
-      {
-        id: 5,
-        message: "The node is doing cool things",
-        node: null,
-        transId: null,
-        coordId: null,
-        subordinate: null,
-        isStatus: true,
-      },
-    ],
+    logitems: [],
   };
 
   componentDidMount() {
     this.setup();
+    this.getNodeData();
   }
 
   async setup() {
@@ -100,7 +82,7 @@ class NodeControl extends Component {
     try {
       const logResponse = await apiGet(this.state.nodeId, "/info");
       console.log("Response: ", logResponse);
-      this.setState({ logitems: logResponse.data.logs });
+      this.setState({ logitems: logResponse.data });
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
     }
