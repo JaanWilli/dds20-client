@@ -19,6 +19,14 @@
   margin-bottom: 10px;
 }
 
+.buttonSection .coordinatorSpecific {
+  margin-top: 5px;
+}
+
+.buttonSection .subordinateSpecific {
+  margin-top: 5px;
+}
+
 .ui.tag.label {
   cursor: default;
 }
