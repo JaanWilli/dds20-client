@@ -108,7 +108,7 @@ class NodeControl extends Component {
               Inactive
             </Label>
           )}
-          {this.state.dieAfter !== "never" ? (
+          {this.state.dieAfter && this.state.dieAfter !== "never" ? (
             <Label as="a" color="black" tag>
               die after: {this.state.dieAfter}
             </Label>
