@@ -13,6 +13,7 @@ class NodeControl extends Component {
 
     active: false,
     dieAfter: "never",
+    vote: true,
     logitems: [],
   };
 
@@ -50,10 +51,11 @@ class NodeControl extends Component {
     }
   }
 
-  async setNodeSettings(active, dieAfter) {
+  async setNodeSettings(active, dieAfter, vote) {
     const requestBody = JSON.stringify({
       active: active,
       dieAfter: dieAfter,
+      vote: vote,
     });
 
     console.log("API POST /settings", requestBody);
@@ -74,6 +76,7 @@ class NodeControl extends Component {
       this.setState({
         active: statusResponse.data.active,
         dieAfter: statusResponse.data.dieAfter,
+        vote: statusResponse.data.vote,
       });
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
@@ -108,6 +111,15 @@ class NodeControl extends Component {
               Inactive
             </Label>
           )}
+          {this.state.vote ? (
+            <Label as="a" color="green" tag>
+              Yes-Vote
+            </Label>
+          ) : (
+            <Label as="a" color="red" tag>
+              No-Vote
+            </Label>
+          )}
           {this.state.dieAfter && this.state.dieAfter !== "never" ? (
             <Label as="a" color="black" tag>
               die after: {this.state.dieAfter}
@@ -118,10 +130,23 @@ class NodeControl extends Component {
         </div>
         <div className="buttonSection">
           <Button
-            onClick={() => this.setNodeSettings(!this.state.active, "never")}
+            onClick={() =>
+              this.setNodeSettings(!this.state.active, "never", this.state.vote)
+            }
             icon
           >
             <Icon name="power off" />
+          </Button>
+          <Button
+            onClick={() =>
+              this.setNodeSettings(
+                this.state.active,
+                this.state.dieAfter,
+                !this.state.vote
+              )
+            }
+          >
+            Change Vote
           </Button>
           {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
@@ -134,7 +159,11 @@ class NodeControl extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setNodeSettings(this.state.active, "prepare")
+                  this.setNodeSettings(
+                    this.state.active,
+                    "prepare",
+                    this.state.vote
+                  )
                 }
                 disabled={!this.state.active}
               >
@@ -142,7 +171,11 @@ class NodeControl extends Component {
               </Button>
               <Button
                 onClick={() =>
-                  this.setNodeSettings(this.state.active, "commit/abort")
+                  this.setNodeSettings(
+                    this.state.active,
+                    "commit/abort",
+                    this.state.vote
+                  )
                 }
                 disabled={!this.state.active}
               >
@@ -153,7 +186,11 @@ class NodeControl extends Component {
             <div className="subordinateSpecific">
               <Button
                 onClick={() =>
-                  this.setNodeSettings(this.state.active, "yes/no")
+                  this.setNodeSettings(
+                    this.state.active,
+                    "yes/no",
+                    this.state.vote
+                  )
                 }
                 disabled={!this.state.active}
               >
