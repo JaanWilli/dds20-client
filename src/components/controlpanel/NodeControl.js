@@ -149,54 +149,99 @@ class NodeControl extends Component {
             Change Vote
           </Button>
           {this.state.isCoordinator ? (
+            <Button
+              onClick={() => this.startTransaction()}
+              disabled={!this.state.active}
+              icon
+            >
+              <Icon name="play"></Icon>
+            </Button>
+          ) : (
+            ""
+          )}
+          {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
-              <Button
-                onClick={() => this.startTransaction()}
-                disabled={!this.state.active}
-                icon
-              >
-                <Icon name="play"></Icon>
-              </Button>
-              <Button
-                onClick={() =>
-                  this.setNodeSettings(
-                    this.state.active,
-                    "prepare",
-                    this.state.vote
-                  )
-                }
-                disabled={!this.state.active}
-              >
-                Die after sending prepare
-              </Button>
-              <Button
-                onClick={() =>
-                  this.setNodeSettings(
-                    this.state.active,
-                    "commit/abort",
-                    this.state.vote
-                  )
-                }
-                disabled={!this.state.active}
-              >
-                Die after sending commit/abort
-              </Button>
+              <Label>Die After:</Label>
+              <Button.Group>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "prepare",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Sending Prepare
+                </Button>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "commit/abort",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Writing Commit/Abort
+                </Button>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "result",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Sending Commit/Abort
+                </Button>
+              </Button.Group>
             </div>
           ) : (
             <div className="subordinateSpecific">
-              <Button
-                onClick={() =>
-                  this.setNodeSettings(
-                    this.state.active,
-                    "yes/no",
-                    this.state.vote
-                  )
-                }
-                disabled={!this.state.active}
-              >
-                Die after sending yes/no
-              </Button>
-              <Button disabled={!this.state.active}>Flag3</Button>
+              <Label>Die After:</Label>
+              <Button.Group>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "prepare",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Writing Prepare
+                </Button>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "vote",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Sending Vote
+                </Button>
+                <Button
+                  onClick={() =>
+                    this.setNodeSettings(
+                      this.state.active,
+                      "commit/abort",
+                      this.state.vote
+                    )
+                  }
+                  disabled={!this.state.active}
+                >
+                  Writing Commit/Abort
+                </Button>
+              </Button.Group>
             </div>
           )}
         </div>

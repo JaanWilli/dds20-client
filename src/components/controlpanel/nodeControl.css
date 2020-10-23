@@ -19,14 +19,6 @@
   margin-bottom: 10px;
 }
 
-.buttonSection .coordinatorSpecific {
-  float: right;
-}
-
-.buttonSection .subordinateSpecific {
-  float: right;
-}
-
 .ui.tag.label {
   cursor: default;
 }
