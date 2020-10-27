@@ -22,7 +22,7 @@ class NodeControl extends Component {
     this.getNodeData();
     setInterval(() => {
       this.getNodeData();
-    }, 2500);
+    }, 2000);
   }
 
   async setup() {
@@ -37,6 +37,7 @@ class NodeControl extends Component {
     console.log("API POST /setup", requestBody);
     try {
       await apiPost(this.state.nodeId, "/setup", requestBody);
+      this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
     }
@@ -93,6 +94,14 @@ class NodeControl extends Component {
     }
   }
 
+  handleDieAfter(newState) {
+    this.setNodeSettings(this.state.active, newState, this.state.vote);
+  }
+
+  handleVote(newVote) {
+    this.setNodeSettings(this.state.active, this.state.dieAfter, newVote);
+  }
+
   render() {
     return (
       <div className="nodeControl">
@@ -111,15 +120,20 @@ class NodeControl extends Component {
               Inactive
             </Label>
           )}
-          {this.state.vote ? (
-            <Label as="a" color="green" tag>
-              Yes-Vote
-            </Label>
+          {this.state.isSubordinate ? (
+            this.state.vote ? (
+              <Label as="a" color="green" tag>
+                Yes-Vote
+              </Label>
+            ) : (
+              <Label as="a" color="red" tag>
+                No-Vote
+              </Label>
+            )
           ) : (
-            <Label as="a" color="red" tag>
-              No-Vote
-            </Label>
+            ""
           )}
+
           {this.state.dieAfter && this.state.dieAfter !== "never" ? (
             <Label as="a" color="black" tag>
               die after: {this.state.dieAfter}
@@ -129,25 +143,6 @@ class NodeControl extends Component {
           )}
         </div>
         <div className="buttonSection">
-          <Button
-            onClick={() =>
-              this.setNodeSettings(!this.state.active, "never", this.state.vote)
-            }
-            icon
-          >
-            <Icon name="power off" />
-          </Button>
-          <Button
-            onClick={() =>
-              this.setNodeSettings(
-                this.state.active,
-                this.state.dieAfter,
-                !this.state.vote
-              )
-            }
-          >
-            Change Vote
-          </Button>
           {this.state.isCoordinator ? (
             <Button
               onClick={() => this.startTransaction()}
@@ -157,44 +152,31 @@ class NodeControl extends Component {
               <Icon name="play"></Icon>
             </Button>
           ) : (
-            ""
+            <Button onClick={() => this.handleVote(!this.state.vote)}>
+              Change Vote
+            </Button>
           )}
+          <Button onClick={() => this.handleDieAfter("never")}>
+            Die Never
+          </Button>
           {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "prepare",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("prepare")}
                   disabled={!this.state.active}
                 >
                   Sending Prepare
                 </Button>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "commit/abort",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("commit/abort")}
                   disabled={!this.state.active}
                 >
                   Writing Commit/Abort
                 </Button>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "result",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("result")}
                   disabled={!this.state.active}
                 >
                   Sending Commit/Abort
@@ -206,37 +188,19 @@ class NodeControl extends Component {
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "prepare",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("prepare")}
                   disabled={!this.state.active}
                 >
                   Writing Prepare
                 </Button>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "vote",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("vote")}
                   disabled={!this.state.active}
                 >
                   Sending Vote
                 </Button>
                 <Button
-                  onClick={() =>
-                    this.setNodeSettings(
-                      this.state.active,
-                      "commit/abort",
-                      this.state.vote
-                    )
-                  }
+                  onClick={() => this.handleDieAfter("commit/abort")}
                   disabled={!this.state.active}
                 >
                   Writing Commit/Abort
