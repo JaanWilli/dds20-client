@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import ControlPanel from "./components/controlpanel/ControlPanel";
+import AppRouter from "./helpers/router";
 
 class App extends Component {
   render() {
     return (
       <div>
-        <ControlPanel />
+        <h1>Control Panel</h1>
+        <AppRouter />
       </div>
     );
   }
