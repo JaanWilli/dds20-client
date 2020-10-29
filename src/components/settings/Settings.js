@@ -29,16 +29,29 @@ class Settings extends Component {
     let nodes = [...coordinator, ...this.state.subordinates];
     localStorage.removeItem("nodes");
     localStorage.setItem("nodes", JSON.stringify(nodes));
+    console.log(nodes);
     this.props.history.push(`/controlpanel`);
+  }
+
+  rebase() {
+    let subordinates = this.state.subordinates;
+    subordinates.forEach((sub) => {
+      sub.coordinator = this.state.coordinator.nodeId;
+    });
+    this.setState({ subordinates: subordinates });
+
+    let coordinator = this.state.coordinator;
+    let subordinatesList = [];
+    this.state.subordinates.forEach((sub) => {
+      subordinatesList.push(sub.nodeId);
+    });
+    coordinator.subordinates = subordinatesList;
+    this.setState({ coordinator: coordinator });
   }
 
   updateCoordinator(newPath) {
     this.setState({ coordinator: newPath });
-    let subordinates = this.state.subordinates;
-    subordinates.forEach((sub) => {
-      sub.coordinator = newPath;
-    });
-    this.setState({ subordinates: subordinates });
+    this.rebase();
   }
 
   updateSubordinates(newPath, index) {
@@ -48,16 +61,14 @@ class Settings extends Component {
 
     subordinates[index] = subordinate;
     this.setState({ subordinates: subordinates });
-
-    let coordinator = this.state.coordinator;
-    coordinator.subordinates = this.state.subordinates;
-    this.setState({ coordinator: coordinator });
+    this.rebase();
   }
 
   removeSubordinate(index) {
     let subordinates = this.state.subordinates;
     subordinates.splice(index, 1);
     this.setState({ subordinates: subordinates });
+    this.rebase();
   }
 
   addSubordinate() {
@@ -71,10 +82,7 @@ class Settings extends Component {
     };
     subordinates.push(newSubordinate);
     this.setState({ subordinates: subordinates });
-
-    let coordinator = this.state.coordinator;
-    coordinator.subordinates = this.state.subordinates;
-    this.setState({ coordinator: coordinator });
+    this.rebase();
   }
   render() {
     return (
