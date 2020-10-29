@@ -50,7 +50,9 @@ class Settings extends Component {
   }
 
   updateCoordinator(newPath) {
-    this.setState({ coordinator: newPath });
+    let coordinator = this.state.coordinator;
+    coordinator.nodeId = newPath;
+    this.setState({ coordinator: coordinator });
     this.rebase();
   }
 
