@@ -122,11 +122,21 @@ class NodeControl extends Component {
           )}
           {this.state.isSubordinate ? (
             this.state.vote ? (
-              <Label onClick={() => this.handleVote(!this.state.vote)} as="a" color="green" tag>
+              <Label
+                onClick={() => this.handleVote(!this.state.vote)}
+                as="a"
+                color="green"
+                tag
+              >
                 Yes-Vote
               </Label>
             ) : (
-              <Label onClick={() => this.handleVote(!this.state.vote)} as="a" color="red" tag>
+              <Label
+                onClick={() => this.handleVote(!this.state.vote)}
+                as="a"
+                color="red"
+                tag
+              >
                 No-Vote
               </Label>
             )
@@ -185,28 +195,31 @@ class NodeControl extends Component {
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
-                  onClick={() => {this.state.dieAfter !== "prepare" ?
-                      this.handleDieAfter("prepare") :
-                      this.handleDieAfter("never")}
-                  }
+                  onClick={() => {
+                    this.state.dieAfter !== "prepare"
+                      ? this.handleDieAfter("prepare")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Writing Prepare
                 </Button>
                 <Button
-                  onClick={() => {this.state.dieAfter !== "vote" ?
-                      this.handleDieAfter("vote") :
-                      this.handleDieAfter("never")}
-                  }
+                  onClick={() => {
+                    this.state.dieAfter !== "vote"
+                      ? this.handleDieAfter("vote")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Sending Vote
                 </Button>
                 <Button
-                  onClick={() => {this.state.dieAfter !== "commit/abort" ?
-                      this.handleDieAfter("commit/abort") :
-                      this.handleDieAfter("never")}
-                  }
+                  onClick={() => {
+                    this.state.dieAfter !== "commit/abort"
+                      ? this.handleDieAfter("commit/abort")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Writing Commit/Abort
