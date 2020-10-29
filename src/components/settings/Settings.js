@@ -86,7 +86,7 @@ class Settings extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="settings">
         <Table>
           <Table.Header>
             <Table.Row>

@@ -1,0 +1,7 @@
+.settings {
+  max-width: 800px;
+}
+
+input[type="text"] {
+  min-width: 400px;
+}
