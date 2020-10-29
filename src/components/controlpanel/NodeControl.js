@@ -122,11 +122,11 @@ class NodeControl extends Component {
           )}
           {this.state.isSubordinate ? (
             this.state.vote ? (
-              <Label as="a" color="green" tag>
+              <Label onClick={() => this.handleVote(!this.state.vote)} as="a" color="green" tag>
                 Yes-Vote
               </Label>
             ) : (
-              <Label as="a" color="red" tag>
+              <Label onClick={() => this.handleVote(!this.state.vote)} as="a" color="red" tag>
                 No-Vote
               </Label>
             )
@@ -156,9 +156,6 @@ class NodeControl extends Component {
               Change Vote
             </Button>
           )}
-          <Button onClick={() => this.handleDieAfter("never")}>
-            Die Never
-          </Button>
           {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
               <Label>Die After:</Label>
@@ -188,19 +185,28 @@ class NodeControl extends Component {
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
-                  onClick={() => this.handleDieAfter("prepare")}
+                  onClick={() => {this.state.dieAfter !== "prepare" ?
+                      this.handleDieAfter("prepare") :
+                      this.handleDieAfter("never")}
+                  }
                   disabled={!this.state.active}
                 >
                   Writing Prepare
                 </Button>
                 <Button
-                  onClick={() => this.handleDieAfter("vote")}
+                  onClick={() => {this.state.dieAfter !== "vote" ?
+                      this.handleDieAfter("vote") :
+                      this.handleDieAfter("never")}
+                  }
                   disabled={!this.state.active}
                 >
                   Sending Vote
                 </Button>
                 <Button
-                  onClick={() => this.handleDieAfter("commit/abort")}
+                  onClick={() => {this.state.dieAfter !== "commit/abort" ?
+                      this.handleDieAfter("commit/abort") :
+                      this.handleDieAfter("never")}
+                  }
                   disabled={!this.state.active}
                 >
                   Writing Commit/Abort
