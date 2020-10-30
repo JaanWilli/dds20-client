@@ -15,10 +15,10 @@ class ControlPanel extends Component {
 
     return (
       <div>
-        <div>
-          <Button onClick={() => this.back()}>Settings</Button>
+        <div className="header">
+          <Button circular icon="settings" onClick={() => this.back()} />
         </div>
-        <div>
+        <div className="nodes">
           {nodes.map((node) => {
             return (
               <NodeControl
