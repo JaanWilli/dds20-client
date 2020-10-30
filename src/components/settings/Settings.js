@@ -6,6 +6,7 @@ import {
   getConfigCoordinator,
   getConfigSubordinates,
 } from "../../helpers/getConfig";
+import { apiGet, apiPost } from "../../helpers/api";
 
 class Settings extends Component {
   state = {
@@ -31,6 +32,16 @@ class Settings extends Component {
     localStorage.setItem("nodes", JSON.stringify(nodes));
     console.log(nodes);
     this.props.history.push(`/controlpanel`);
+  }
+
+  async testConnection(path) {
+    console.log("API POST /");
+    try {
+      await apiGet(path, "");
+      alert(`The node is connected`);
+    } catch (error) {
+      alert(`WARNING: The node is not connected`);
+    }
   }
 
   rebase() {
@@ -93,6 +104,7 @@ class Settings extends Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Coordinator</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -103,6 +115,16 @@ class Settings extends Component {
                     defaultValue={this.state.coordinator.nodeId}
                     onChange={(e) => this.updateCoordinator(e.target.value)}
                   />
+                </Table.Cell>
+                <Table.Cell textAlign="right">
+                  <Button
+                    onClick={() =>
+                      this.testConnection(this.state.coordinator.nodeId)
+                    }
+                    icon
+                  >
+                    <Icon name="handshake outline" />
+                  </Button>
                 </Table.Cell>
               </Table.Row>
             ) : (
@@ -115,7 +137,8 @@ class Settings extends Component {
             <Table.Row>
               <Table.HeaderCell>Subordinates</Table.HeaderCell>
               <Table.HeaderCell>Coordinator</Table.HeaderCell>
-              <Table.HeaderCell>Remove</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -132,12 +155,20 @@ class Settings extends Component {
                         />
                       </Table.Cell>
                       <Table.Cell>{node.coordinator}</Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell textAlign="right">
                         <Button
                           onClick={() => this.removeSubordinate(index)}
                           icon
                         >
-                          <Icon name="trash"></Icon>
+                          <Icon name="trash" />
+                        </Button>
+                      </Table.Cell>
+                      <Table.Cell textAlign="right">
+                        <Button
+                          onClick={() => this.testConnection(node.nodeId)}
+                          icon
+                        >
+                          <Icon name="handshake outline" />
                         </Button>
                       </Table.Cell>
                     </Table.Row>
@@ -147,7 +178,10 @@ class Settings extends Component {
           </Table.Body>
         </Table>
 
-        <Button onClick={() => this.addSubordinate()}>Add Subordinate</Button>
+        <Button icon onClick={() => this.addSubordinate()}>
+          <Icon name="plus square" />
+          Subordinate
+        </Button>
         <Button onClick={() => this.start()}>Start</Button>
       </div>
     );
