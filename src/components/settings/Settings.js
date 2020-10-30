@@ -6,7 +6,7 @@ import {
   getConfigCoordinator,
   getConfigSubordinates,
 } from "../../helpers/getConfig";
-import { apiGet, apiPost } from "../../helpers/api";
+import { apiGet } from "../../helpers/api";
 
 class Settings extends Component {
   state = {
