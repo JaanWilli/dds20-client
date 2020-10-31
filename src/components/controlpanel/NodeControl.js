@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Label, Icon } from "semantic-ui-react";
 import Log from "./logpanel/Log";
 import { apiPost, apiGet, handleError } from "../../helpers/api";
+import { withRouter } from "react-router-dom";
 
 class NodeControl extends Component {
   state = {
@@ -19,7 +20,6 @@ class NodeControl extends Component {
 
   componentDidMount() {
     this.setup();
-    this.getNodeData();
     this.intervalId = setInterval(() => {
       this.getNodeData();
     }, 2000);
@@ -27,6 +27,10 @@ class NodeControl extends Component {
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
+  }
+
+  back() {
+    this.props.history.push(`/settings`);
   }
 
   async setup() {
@@ -44,6 +48,7 @@ class NodeControl extends Component {
       this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
     }
   }
 
@@ -53,6 +58,7 @@ class NodeControl extends Component {
       await apiPost(this.state.nodeId, "/start");
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
     }
   }
 
@@ -68,6 +74,7 @@ class NodeControl extends Component {
       await apiPost(this.state.nodeId, "/settings", requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
     }
     this.getNodeData();
   }
@@ -85,6 +92,7 @@ class NodeControl extends Component {
       });
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
     }
 
     //get log infos
@@ -95,6 +103,7 @@ class NodeControl extends Component {
       this.setState({ logitems: logResponse.data });
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
     }
   }
 
@@ -239,4 +248,4 @@ class NodeControl extends Component {
   }
 }
 
-export default NodeControl;
+export default withRouter(NodeControl);

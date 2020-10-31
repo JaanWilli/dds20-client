@@ -44,7 +44,7 @@ export const handleError = (error) => {
     return info;
   } else {
     if (error.message.match(/Network Error/)) {
-      alert("The node cannot be reached.\nDid you start it?");
+      return "The node cannot be reached.\n\nDid you start it?";
     }
 
     console.log("Something else happened.", error);
