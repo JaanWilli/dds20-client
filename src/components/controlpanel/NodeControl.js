@@ -20,9 +20,13 @@ class NodeControl extends Component {
   componentDidMount() {
     this.setup();
     this.getNodeData();
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.getNodeData();
     }, 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
 
   async setup() {
