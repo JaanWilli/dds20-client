@@ -215,7 +215,7 @@ class NodeControl extends Component {
                   }}
                   disabled={!this.state.active}
                 >
-                  Writing Prepare
+                  Writing {this.state.vote ? "Prepare" : "Abort"}
                 </Button>
                 <Button
                   onClick={() => {
@@ -227,16 +227,20 @@ class NodeControl extends Component {
                 >
                   Sending Vote
                 </Button>
-                <Button
-                  onClick={() => {
-                    this.state.dieAfter !== "commit/abort"
-                      ? this.handleDieAfter("commit/abort")
-                      : this.handleDieAfter("never");
-                  }}
-                  disabled={!this.state.active}
-                >
-                  Writing Commit/Abort
-                </Button>
+                {this.state.vote ? (
+                  <Button
+                    onClick={() => {
+                      this.state.dieAfter !== "commit/abort"
+                        ? this.handleDieAfter("commit/abort")
+                        : this.handleDieAfter("never");
+                    }}
+                    disabled={!this.state.active}
+                  >
+                    Writing Commit/Abort
+                  </Button>
+                ) : (
+                  ""
+                )}
               </Button.Group>
             </div>
           )}
