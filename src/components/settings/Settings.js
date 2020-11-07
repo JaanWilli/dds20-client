@@ -15,12 +15,19 @@ class Settings extends Component {
   };
 
   componentDidMount() {
-    let configCoordinator = getConfigCoordinator();
-    let configSubordinates = getConfigSubordinates();
+    let coordinator;
+    let subordinates;
+    if (localStorage.getItem("nodes")) {
+      coordinator = this.getCoordinatorFromStorage();
+      subordinates = this.getSubordinatesFromStorage();
+    } else {
+      coordinator = getConfigCoordinator();
+      subordinates = getConfigSubordinates();
+    }
 
     this.setState({
-      coordinator: configCoordinator,
-      subordinates: configSubordinates,
+      coordinator: coordinator,
+      subordinates: subordinates,
     });
   }
 
@@ -32,6 +39,22 @@ class Settings extends Component {
     localStorage.setItem("nodes", JSON.stringify(nodes));
     console.log(nodes);
     this.props.history.push(`/controlpanel`);
+  }
+
+  getCoordinatorFromStorage() {
+    let nodes = JSON.parse(localStorage.getItem("nodes"));
+    let coordinator = nodes.filter((node) => {
+      return node.isCoordinator;
+    });
+    return coordinator[0];
+  }
+
+  getSubordinatesFromStorage() {
+    let nodes = JSON.parse(localStorage.getItem("nodes"));
+    let subordinates = nodes.filter((node) => {
+      return node.isSubordinate;
+    });
+    return subordinates;
   }
 
   async testConnection(path) {
