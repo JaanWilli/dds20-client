@@ -184,19 +184,31 @@ class NodeControl extends Component {
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
-                  onClick={() => this.handleDieAfter("prepare")}
+                  onClick={() => {
+                    this.state.dieAfter !== "prepare"
+                      ? this.handleDieAfter("prepare")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Sending Prepare
                 </Button>
                 <Button
-                  onClick={() => this.handleDieAfter("commit/abort")}
+                  onClick={() => {
+                    this.state.dieAfter !== "commit/abort"
+                      ? this.handleDieAfter("commit/abort")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Writing Commit/Abort
                 </Button>
                 <Button
-                  onClick={() => this.handleDieAfter("result")}
+                  onClick={() => {
+                    this.state.dieAfter !== "result"
+                      ? this.handleDieAfter("result")
+                      : this.handleDieAfter("never");
+                  }}
                   disabled={!this.state.active}
                 >
                   Sending Commit/Abort
