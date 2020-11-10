@@ -4,10 +4,22 @@ import { Button } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 
 class ControlPanel extends Component {
-  state = {};
+  state = {
+    random: false,
+  };
 
   back() {
     this.props.history.push(`/settings`);
+  }
+
+  toggleRandom() {
+    if (localStorage.getItem("random")) {
+      localStorage.removeItem("random");
+      this.setState({ random: false });
+    } else {
+      localStorage.setItem("random", true);
+      this.setState({ random: true });
+    }
   }
 
   render() {
@@ -16,6 +28,13 @@ class ControlPanel extends Component {
     return (
       <div>
         <div className="header">
+          <Button
+            circular
+            toggle
+            icon="random"
+            active={localStorage.getItem("random") ? true : false}
+            onClick={() => this.toggleRandom()}
+          />
           <Button circular icon="settings" onClick={() => this.back()} />
         </div>
         <div className="nodes">

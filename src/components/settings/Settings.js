@@ -120,92 +120,114 @@ class Settings extends Component {
     this.setState({ subordinates: subordinates });
     this.rebase();
   }
+
+  toggleRandom() {
+    if (localStorage.getItem("random")) {
+      localStorage.removeItem("random");
+      this.setState({ random: false });
+    } else {
+      localStorage.setItem("random", true);
+      this.setState({ random: true });
+    }
+  }
+
   render() {
     return (
-      <div className="settings">
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Coordinator</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {this.state.coordinator ? (
+      <div>
+        <div className="header">
+          <Button
+            circular
+            toggle
+            icon="random"
+            active={localStorage.getItem("random") ? true : false}
+            onClick={() => this.toggleRandom()}
+          />
+        </div>
+        <div className="settings">
+          <Table>
+            <Table.Header>
               <Table.Row>
-                <Table.Cell>
-                  <Input
-                    defaultValue={this.state.coordinator.nodeId}
-                    onChange={(e) => this.updateCoordinator(e.target.value)}
-                  />
-                </Table.Cell>
-                <Table.Cell textAlign="right">
-                  <Button
-                    onClick={() =>
-                      this.testConnection(this.state.coordinator.nodeId)
-                    }
-                    icon
-                  >
-                    <Icon name="handshake outline" />
-                  </Button>
-                </Table.Cell>
+                <Table.HeaderCell>Coordinator</Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
               </Table.Row>
-            ) : (
-              ""
-            )}
-          </Table.Body>
-        </Table>
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Subordinates</Table.HeaderCell>
-              <Table.HeaderCell>Coordinator</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {this.state.subordinates
-              ? this.state.subordinates.map((node, index) => {
-                  return (
-                    <Table.Row>
-                      <Table.Cell>
-                        <Input
-                          defaultValue={node.nodeId}
-                          onChange={(e) =>
-                            this.updateSubordinates(e.target.value, index)
-                          }
-                        />
-                      </Table.Cell>
-                      <Table.Cell>{node.coordinator}</Table.Cell>
-                      <Table.Cell textAlign="right">
-                        <Button
-                          onClick={() => this.removeSubordinate(index)}
-                          icon
-                        >
-                          <Icon name="trash" />
-                        </Button>
-                      </Table.Cell>
-                      <Table.Cell textAlign="right">
-                        <Button
-                          onClick={() => this.testConnection(node.nodeId)}
-                          icon
-                        >
-                          <Icon name="handshake outline" />
-                        </Button>
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })
-              : ""}
-          </Table.Body>
-        </Table>
+            </Table.Header>
+            <Table.Body>
+              {this.state.coordinator ? (
+                <Table.Row>
+                  <Table.Cell>
+                    <Input
+                      defaultValue={this.state.coordinator.nodeId}
+                      onChange={(e) => this.updateCoordinator(e.target.value)}
+                    />
+                  </Table.Cell>
+                  <Table.Cell textAlign="right">
+                    <Button
+                      onClick={() =>
+                        this.testConnection(this.state.coordinator.nodeId)
+                      }
+                      icon
+                    >
+                      <Icon name="handshake outline" />
+                    </Button>
+                  </Table.Cell>
+                </Table.Row>
+              ) : (
+                ""
+              )}
+            </Table.Body>
+          </Table>
+          <Table>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Subordinates</Table.HeaderCell>
+                <Table.HeaderCell>Coordinator</Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {this.state.subordinates
+                ? this.state.subordinates.map((node, index) => {
+                    return (
+                      <Table.Row>
+                        <Table.Cell>
+                          <Input
+                            defaultValue={node.nodeId}
+                            onChange={(e) =>
+                              this.updateSubordinates(e.target.value, index)
+                            }
+                          />
+                        </Table.Cell>
+                        <Table.Cell>{node.coordinator}</Table.Cell>
+                        <Table.Cell textAlign="right">
+                          <Button
+                            onClick={() => this.removeSubordinate(index)}
+                            icon
+                          >
+                            <Icon name="trash" />
+                          </Button>
+                        </Table.Cell>
+                        <Table.Cell textAlign="right">
+                          <Button
+                            onClick={() => this.testConnection(node.nodeId)}
+                            icon
+                          >
+                            <Icon name="handshake outline" />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })
+                : ""}
+            </Table.Body>
+          </Table>
 
-        <Button icon onClick={() => this.addSubordinate()}>
-          <Icon name="plus square" />
-          Subordinate
-        </Button>
-        <Button onClick={() => this.start()}>Start</Button>
+          <Button icon onClick={() => this.addSubordinate()}>
+            <Icon name="plus square" />
+            Subordinate
+          </Button>
+          <Button onClick={() => this.start()}>Start</Button>
+        </div>
       </div>
     );
   }

@@ -45,7 +45,9 @@ class NodeControl extends Component {
     console.log("API POST /setup", requestBody);
     try {
       await apiPost(this.state.nodeId, "/setup", requestBody);
-      this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
+      localStorage.getItem("random")
+        ? this.setRandomNodeSettings()
+        : this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -69,6 +71,35 @@ class NodeControl extends Component {
       vote: vote,
     });
 
+    console.log("API POST /settings", requestBody);
+    try {
+      await apiPost(this.state.nodeId, "/settings", requestBody);
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
+    }
+    this.getNodeData();
+  }
+
+  async setRandomNodeSettings() {
+    let rand = Math.floor(Math.random() * 100);
+    const votes = [true, false];
+    const dieAfterCoordinator = ["never", "prepare", "commit/abort", "result"];
+    const dieAfterSubordinateYes = ["never", "prepare", "vote", "commit/abort"];
+    const dieAfterSubordinateNo = ["never", "prepare", "vote"];
+
+    let dieAfters;
+    if (this.state.isCoordinator) {
+      dieAfters = dieAfterCoordinator;
+    } else {
+      dieAfters = this.vote ? dieAfterSubordinateYes : dieAfterSubordinateNo;
+    }
+
+    const requestBody = JSON.stringify({
+      active: true,
+      vote: votes[rand % 2],
+      dieAfter: dieAfters[rand % dieAfters.length],
+    });
     console.log("API POST /settings", requestBody);
     try {
       await apiPost(this.state.nodeId, "/settings", requestBody);
