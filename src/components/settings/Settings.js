@@ -121,28 +121,9 @@ class Settings extends Component {
     this.rebase();
   }
 
-  toggleRandom() {
-    if (localStorage.getItem("random")) {
-      localStorage.removeItem("random");
-      this.setState({ random: false });
-    } else {
-      localStorage.setItem("random", true);
-      this.setState({ random: true });
-    }
-  }
-
   render() {
     return (
       <div>
-        <div className="header">
-          <Button
-            circular
-            toggle
-            icon="random"
-            active={localStorage.getItem("random") ? true : false}
-            onClick={() => this.toggleRandom()}
-          />
-        </div>
         <div className="settings">
           <Table>
             <Table.Header>
@@ -227,6 +208,9 @@ class Settings extends Component {
             Subordinate
           </Button>
           <Button onClick={() => this.start()}>Start</Button>
+          <Button onClick={() => this.props.history.push(`/testpanel`)}>
+            Testpanel
+          </Button>
         </div>
       </div>
     );
