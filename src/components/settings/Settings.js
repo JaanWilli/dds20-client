@@ -31,14 +31,22 @@ class Settings extends Component {
     });
   }
 
-  start() {
+  pushDataToLocalStorage() {
     let coordinator = [];
     coordinator.push(this.state.coordinator);
     let nodes = [...coordinator, ...this.state.subordinates];
     localStorage.removeItem("nodes");
     localStorage.setItem("nodes", JSON.stringify(nodes));
-    console.log(nodes);
+  }
+
+  start() {
+    this.pushDataToLocalStorage();
     this.props.history.push(`/controlpanel`);
+  }
+
+  test() {
+    this.pushDataToLocalStorage();
+    this.props.history.push(`/testpanel`);
   }
 
   getCoordinatorFromStorage() {
@@ -208,9 +216,7 @@ class Settings extends Component {
             Subordinate
           </Button>
           <Button onClick={() => this.start()}>Start</Button>
-          <Button onClick={() => this.props.history.push(`/testpanel`)}>
-            Testpanel
-          </Button>
+          <Button onClick={() => this.test()}>Testpanel</Button>
         </div>
       </div>
     );
