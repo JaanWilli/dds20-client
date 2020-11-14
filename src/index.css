@@ -2,6 +2,7 @@
 @import "./components/controlpanel/nodeControl.css";
 @import "./components/controlpanel/logpanel/log.css";
 @import "./components/settings/settings.css";
+@import "./components/testpanel/testpanel.css";
 
 /**
 This file contains the general and shared style of your application.

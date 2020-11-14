@@ -1,0 +1,7 @@
+.testTable {
+  max-width: 1500px;
+}
+
+.testTable table.ui.table {
+  margin: 10px;
+}
