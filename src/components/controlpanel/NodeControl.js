@@ -88,16 +88,19 @@ class NodeControl extends Component {
     const dieAfterSubordinateYes = ["never", "prepare", "vote", "commit/abort"];
     const dieAfterSubordinateNo = ["never", "prepare", "vote"];
 
+    let vote;
     let dieAfters;
     if (this.state.isCoordinator) {
+      vote = true;
       dieAfters = dieAfterCoordinator;
     } else {
-      dieAfters = this.vote ? dieAfterSubordinateYes : dieAfterSubordinateNo;
+      vote = votes[rand % 2];
+      dieAfters = vote ? dieAfterSubordinateYes : dieAfterSubordinateNo;
     }
 
     const requestBody = JSON.stringify({
       active: true,
-      vote: votes[rand % 2],
+      vote: vote,
       dieAfter: dieAfters[rand % dieAfters.length],
     });
     console.log("API POST /settings", requestBody);
