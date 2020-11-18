@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Label, Icon } from "semantic-ui-react";
+import {Button, Label} from "semantic-ui-react";
 import Log from "./logpanel/Log";
 import { apiPost, apiGet, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
@@ -55,12 +55,14 @@ class NodeControl extends Component {
   }
 
   async startTransaction() {
-    console.log("API POST /start");
-    try {
-      await apiPost(this.state.nodeId, "/start");
-    } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
-      this.back();
+    if (this.state.active) {
+      console.log("API POST /start");
+      try {
+        await apiPost(this.state.nodeId, "/start");
+      } catch (error) {
+        alert(`Something went wrong: \n${handleError(error)}`);
+        this.back();
+      }
     }
   }
 
@@ -147,74 +149,32 @@ class NodeControl extends Component {
   }
 
   render() {
+    let nodeStatus={
+      opacity: "100%",
+      border: "2px #3d4061 solid"
+    };
+
+    if (!this.state.active) {
+      nodeStatus={
+        opacity: "40%",
+        border: "2px #3d4061 solid"
+      }
+    }
+
     return (
-      <div className="nodeControl">
+      <div className="nodeControl" style={nodeStatus}>
         {this.state.isCoordinator ? (
-          <h3>Coordinator ({this.state.nodeId})</h3>
+          <h3> Coordinator ({this.state.nodeId})</h3>
         ) : (
           <h3>Subordinate ({this.state.nodeId})</h3>
         )}
-        <div className="statusSection">
-          {this.state.active ? (
-            <Label as="a" color="green" tag>
-              Active
-            </Label>
-          ) : (
-            <Label as="a" color="red" tag>
-              Inactive
-            </Label>
-          )}
-          {this.state.isSubordinate ? (
-            this.state.vote ? (
-              <Label
-                onClick={() => this.handleVote(!this.state.vote)}
-                as="a"
-                color="green"
-                tag
-              >
-                Yes-Vote
-              </Label>
-            ) : (
-              <Label
-                onClick={() => this.handleVote(!this.state.vote)}
-                as="a"
-                color="red"
-                tag
-              >
-                No-Vote
-              </Label>
-            )
-          ) : (
-            ""
-          )}
-
-          {this.state.dieAfter && this.state.dieAfter !== "never" ? (
-            <Label as="a" color="black" tag>
-              die after: {this.state.dieAfter}
-            </Label>
-          ) : (
-            ""
-          )}
-        </div>
         <div className="buttonSection">
-          {this.state.isCoordinator ? (
-            <Button
-              onClick={() => this.startTransaction()}
-              disabled={!this.state.active}
-              icon
-            >
-              <Icon name="play"></Icon>
-            </Button>
-          ) : (
-            <Button onClick={() => this.handleVote(!this.state.vote)}>
-              Change Vote
-            </Button>
-          )}
           {this.state.isCoordinator ? (
             <div className="coordinatorSpecific">
               <Label>Die After:</Label>
               <Button.Group>
                 <Button
+                  color={this.state.dieAfter === "prepare" ? "black" : ""}
                   onClick={() => {
                     this.state.dieAfter !== "prepare"
                       ? this.handleDieAfter("prepare")
@@ -225,6 +185,7 @@ class NodeControl extends Component {
                   Sending Prepare
                 </Button>
                 <Button
+                  color={this.state.dieAfter === "commit/abort" ? "black" : ""}
                   onClick={() => {
                     this.state.dieAfter !== "commit/abort"
                       ? this.handleDieAfter("commit/abort")
@@ -235,6 +196,7 @@ class NodeControl extends Component {
                   Writing Commit/Abort
                 </Button>
                 <Button
+                  color={this.state.dieAfter === "result" ? "black" : ""}
                   onClick={() => {
                     this.state.dieAfter !== "result"
                       ? this.handleDieAfter("result")
@@ -248,43 +210,67 @@ class NodeControl extends Component {
             </div>
           ) : (
             <div className="subordinateSpecific">
-              <Label>Die After:</Label>
-              <Button.Group>
-                <Button
-                  onClick={() => {
-                    this.state.dieAfter !== "prepare"
-                      ? this.handleDieAfter("prepare")
-                      : this.handleDieAfter("never");
-                  }}
-                  disabled={!this.state.active}
-                >
-                  Writing {this.state.vote ? "Prepare" : "Abort"}
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.state.dieAfter !== "vote"
-                      ? this.handleDieAfter("vote")
-                      : this.handleDieAfter("never");
-                  }}
-                  disabled={!this.state.active}
-                >
-                  Sending Vote
-                </Button>
-                {this.state.vote ? (
+              <div className="vote">
+                <Label>Vote:</Label>
+                <Button.Group>
                   <Button
+                    color={this.state.vote ? "green" : ""}
+                    onClick={() => {this.handleVote(true)}}
+                    disabled={!this.state.active}
+                  >
+                    Yes
+                  </Button>
+                  <Button
+                    color={!this.state.vote ? "red" : ""}
+                    onClick={() => {this.handleVote(false)}}
+                    disabled={!this.state.active}
+                  >
+                    No
+                  </Button>
+                </Button.Group>
+              </div>
+              <div className="dieAfter">
+              <Label>Die After:</Label>
+                <Button.Group>
+                  <Button
+                    color={this.state.dieAfter === "prepare" ? "black" : ""}
                     onClick={() => {
-                      this.state.dieAfter !== "commit/abort"
-                        ? this.handleDieAfter("commit/abort")
+                      this.state.dieAfter !== "prepare"
+                        ? this.handleDieAfter("prepare")
                         : this.handleDieAfter("never");
                     }}
                     disabled={!this.state.active}
                   >
-                    Writing Commit/Abort
+                    Writing {this.state.vote ? "Prepare" : "Abort"}
                   </Button>
-                ) : (
-                  ""
-                )}
-              </Button.Group>
+                  <Button
+                    color={this.state.dieAfter === "vote" ? "black" : ""}
+                    onClick={() => {
+                      this.state.dieAfter !== "vote"
+                        ? this.handleDieAfter("vote")
+                        : this.handleDieAfter("never");
+                    }}
+                    disabled={!this.state.active}
+                  >
+                    Sending Vote
+                  </Button>
+                  {this.state.vote ? (
+                    <Button
+                      color={this.state.dieAfter === "commit/abort" ? "black" : ""}
+                      onClick={() => {
+                        this.state.dieAfter !== "commit/abort"
+                          ? this.handleDieAfter("commit/abort")
+                          : this.handleDieAfter("never");
+                      }}
+                      disabled={!this.state.active}
+                    >
+                      Writing Commit/Abort
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </Button.Group>
+              </div>
             </div>
           )}
         </div>

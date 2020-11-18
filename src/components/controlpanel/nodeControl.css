@@ -1,10 +1,10 @@
 h1 {
   float: left;
+  width: 100%;
 }
 
-button.ui.circular.icon.button {
-  float: left;
-  margin-top: 6px;
+button.ui.icon.left {
+  margin-left: 5px;
 }
 
 .nodes {
@@ -13,10 +13,10 @@ button.ui.circular.icon.button {
 
 .nodeControl {
   float: left;
-  width: 610px;
+  width: 620px;
   height: 100%;
   min-height: 650px;
-  margin: 10px;
+  margin: 5px;
   padding: 5px;
   border: 2px #3d4061 solid;
   border-radius: 3px;
@@ -24,7 +24,7 @@ button.ui.circular.icon.button {
 
 .nodeControl h3 {
   padding: 2px;
-  margin-bottom: 2px;
+  margin: 2px;
 }
 
 .buttonSection {
@@ -41,6 +41,24 @@ button.ui.circular.icon.button {
   margin-top: 5px;
 }
 
-.ui.tag.label {
+.statusSection .ui.label.label {
+  cursor: pointer;
+}
+
+.ui.label.label {
   cursor: default;
+  margin-right: 1px;
+}
+
+.coordinatorSpecific {
+  padding-top: 36px;
+}
+
+.coordinatorSpecific .ui.label.label {
+  background-color: transparent;
+}
+
+.subordinateSpecific .ui.label.label {
+  width: 80px;
+  background-color: transparent;
 }
