@@ -145,7 +145,7 @@ class Settings extends Component {
                 <Table.Row>
                   <Table.Cell>
                     <Input
-                      defaultValue={this.state.coordinator.nodeId}
+                      value={this.state.coordinator.nodeId}
                       onChange={(e) => this.updateCoordinator(e.target.value)}
                     />
                   </Table.Cell>
@@ -177,11 +177,12 @@ class Settings extends Component {
             <Table.Body>
               {this.state.subordinates
                 ? this.state.subordinates.map((node, index) => {
+
                     return (
                       <Table.Row>
                         <Table.Cell>
                           <Input
-                            defaultValue={node.nodeId}
+                            value={node.nodeId}
                             onChange={(e) =>
                               this.updateSubordinates(e.target.value, index)
                             }
