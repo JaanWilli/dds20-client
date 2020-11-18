@@ -12,6 +12,7 @@ class Settings extends Component {
   state = {
     coordinator: "",
     subordinates: [],
+    online: []
   };
 
   componentDidMount() {
@@ -29,6 +30,10 @@ class Settings extends Component {
       coordinator: coordinator,
       subordinates: subordinates,
     });
+    this.isOnline(coordinator.nodeId);
+    for (let subordinate of subordinates) {
+      this.isOnline(subordinate.nodeId);
+    }
   }
 
   pushDataToLocalStorage() {
@@ -65,16 +70,6 @@ class Settings extends Component {
     return subordinates;
   }
 
-  async testConnection(path) {
-    console.log("API POST /");
-    try {
-      await apiGet(path, "");
-      alert(`The node is connected`);
-    } catch (error) {
-      alert(`WARNING: The node is not connected`);
-    }
-  }
-
   rebase() {
     let subordinates = this.state.subordinates;
     subordinates.forEach((sub) => {
@@ -96,6 +91,7 @@ class Settings extends Component {
     coordinator.nodeId = newPath;
     this.setState({ coordinator: coordinator });
     this.rebase();
+    this.isOnline(newPath);
   }
 
   updateSubordinates(newPath, index) {
@@ -106,6 +102,7 @@ class Settings extends Component {
     subordinates[index] = subordinate;
     this.setState({ subordinates: subordinates });
     this.rebase();
+    this.isOnline(newPath);
   }
 
   removeSubordinate(index) {
@@ -129,6 +126,27 @@ class Settings extends Component {
     this.rebase();
   }
 
+  async isOnline(path) {
+    console.log("API POST /");
+    let online = false;
+    try {
+      let response = await apiGet(path, "")
+          .then(data => {return data});
+      if (response.status === 200) {
+        online = true;
+      }
+    } catch (error) {}
+    let list = this.state.online;
+    if (online && !list.includes(path)) {
+      list.push(path);
+    }
+    else if (!online && list.includes(path)) {
+      const idx = list.indexOf(path);
+      list.splice(idx, 1);
+    }
+    this.setState({online: list});
+  }
+
   render() {
     return (
       <div>
@@ -137,7 +155,7 @@ class Settings extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Coordinator</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell/>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -150,13 +168,13 @@ class Settings extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell textAlign="right">
-                    <Button
-                      onClick={() =>
-                        this.testConnection(this.state.coordinator.nodeId)
-                      }
-                      icon
+                    <Button className="connectionStatus"
+                            icon
+                            color={this.state.online.includes(this.state.coordinator.nodeId) ?
+                                "green" : "red"}
                     >
-                      <Icon name="handshake outline" />
+                      {this.state.online.includes(this.state.coordinator.nodeId) ?
+                          <Icon name="check" /> : <Icon name="remove" /> }
                     </Button>
                   </Table.Cell>
                 </Table.Row>
@@ -170,8 +188,8 @@ class Settings extends Component {
               <Table.Row>
                 <Table.HeaderCell>Subordinates</Table.HeaderCell>
                 <Table.HeaderCell>Coordinator</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell/>
+                <Table.HeaderCell/>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -197,12 +215,14 @@ class Settings extends Component {
                             <Icon name="trash" />
                           </Button>
                         </Table.Cell>
-                        <Table.Cell textAlign="right">
-                          <Button
-                            onClick={() => this.testConnection(node.nodeId)}
+                        <Table.Cell>
+                          <Button className="connectionStatus"
                             icon
+                            color={this.state.online.includes(node.nodeId) ?
+                                "green" : "red"}
                           >
-                            <Icon name="handshake outline" />
+                            {this.state.online.includes(node.nodeId) ?
+                                <Icon name="check" /> : <Icon name="remove" /> }
                           </Button>
                         </Table.Cell>
                       </Table.Row>
@@ -217,7 +237,7 @@ class Settings extends Component {
             Subordinate
           </Button>
           <Button onClick={() => this.start()}>Start</Button>
-          <Button onClick={() => this.test()}>Testpanel</Button>
+          <Button onClick={() => this.test()}>Test Panel</Button>
         </div>
       </div>
     );
