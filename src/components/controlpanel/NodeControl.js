@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Button, Label} from "semantic-ui-react";
+import { Button, Label } from "semantic-ui-react";
 import Log from "./logpanel/Log";
 import { apiPost, apiGet, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
@@ -84,7 +84,9 @@ class NodeControl extends Component {
   }
 
   async setRandomNodeSettings() {
-    let rand = Math.floor(Math.random() * 100);
+    let rand1 = Math.floor(Math.random() * 100);
+    let rand2 = Math.floor(Math.random() * 100);
+
     const votes = [true, false];
     const dieAfterCoordinator = ["never", "prepare", "commit/abort", "result"];
     const dieAfterSubordinateYes = ["never", "prepare", "vote", "commit/abort"];
@@ -96,14 +98,14 @@ class NodeControl extends Component {
       vote = true;
       dieAfters = dieAfterCoordinator;
     } else {
-      vote = votes[rand % 2];
+      vote = votes[rand1 % 2];
       dieAfters = vote ? dieAfterSubordinateYes : dieAfterSubordinateNo;
     }
 
     const requestBody = JSON.stringify({
       active: true,
       vote: vote,
-      dieAfter: dieAfters[rand % dieAfters.length],
+      dieAfter: dieAfters[rand2 % dieAfters.length],
     });
     console.log("API POST /settings", requestBody);
     try {
@@ -152,16 +154,16 @@ class NodeControl extends Component {
   }
 
   render() {
-    let nodeStatus={
+    let nodeStatus = {
       opacity: "100%",
-      border: "2px #3d4061 solid"
+      border: "2px #3d4061 solid",
     };
 
     if (!this.state.active) {
-      nodeStatus={
+      nodeStatus = {
         opacity: "40%",
-        border: "2px #3d4061 solid"
-      }
+        border: "2px #3d4061 solid",
+      };
     }
 
     return (
@@ -218,14 +220,18 @@ class NodeControl extends Component {
                 <Button.Group>
                   <Button
                     color={this.state.vote ? "green" : ""}
-                    onClick={() => {this.handleVote(true)}}
+                    onClick={() => {
+                      this.handleVote(true);
+                    }}
                     disabled={!this.state.active}
                   >
                     Yes
                   </Button>
                   <Button
                     color={!this.state.vote ? "red" : ""}
-                    onClick={() => {this.handleVote(false)}}
+                    onClick={() => {
+                      this.handleVote(false);
+                    }}
                     disabled={!this.state.active}
                   >
                     No
@@ -233,7 +239,7 @@ class NodeControl extends Component {
                 </Button.Group>
               </div>
               <div className="dieAfter">
-              <Label>Die After:</Label>
+                <Label>Die After:</Label>
                 <Button.Group>
                   <Button
                     color={this.state.dieAfter === "prepare" ? "black" : ""}
@@ -259,7 +265,9 @@ class NodeControl extends Component {
                   </Button>
                   {this.state.vote ? (
                     <Button
-                      color={this.state.dieAfter === "commit/abort" ? "black" : ""}
+                      color={
+                        this.state.dieAfter === "commit/abort" ? "black" : ""
+                      }
                       onClick={() => {
                         this.state.dieAfter !== "commit/abort"
                           ? this.handleDieAfter("commit/abort")
