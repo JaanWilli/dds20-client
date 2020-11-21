@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { Button, Table } from "semantic-ui-react";
+import { Button, Table, Icon } from "semantic-ui-react";
 import { apiGet, apiPost, handleError } from "../../helpers/api";
 import HistoryRow from "./history/HistoryRow";
 
@@ -176,7 +176,13 @@ class Testpanel extends Component {
     return (
       <div>
         <div className="header">
-          <Button circular icon="settings" onClick={() => this.back()} />
+          <Button
+            onClick={() => this.back()}
+            className="left ui labeled icon button"
+          >
+            <Icon className="left chevron icon" />
+            Back
+          </Button>
         </div>
         <div className="testTable">
           <Table>
