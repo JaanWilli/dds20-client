@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Button, Table } from "semantic-ui-react";
+import { apiGet, apiPost, handleError } from "../../helpers/api";
 import HistoryRow from "./history/HistoryRow";
 
 class Testpanel extends Component {
   state = {
+    nodeConfig: [],
     nodes: [],
     history: [],
   };
@@ -20,18 +22,19 @@ class Testpanel extends Component {
       coordinator: n.coordinator,
       dieAfter: "never",
       vote: true,
-      logitems: [],
+      log: [],
     }));
 
-    this.setState({ nodes: extendedNodes, history: [] });
+    this.setState({ nodeConfig: extendedNodes, history: [] });
 
     this.intervalId = setInterval(() => {
-      this.startTestCase();
-    }, 2000);
+      this.generateTestCase();
+      this.sendSetups();
+    }, 20000);
   }
 
-  startTestCase() {
-    let nodes = JSON.parse(JSON.stringify(this.state.nodes));
+  generateTestCase() {
+    let nodes = JSON.parse(JSON.stringify(this.state.nodeConfig));
     let randomizedNodes = nodes.map((node) => {
       this.setRandomNodeSettings(node);
       return node;
@@ -71,6 +74,100 @@ class Testpanel extends Component {
     return node;
   }
 
+  sendSetups() {
+    for (let node of this.state.nodes) {
+      this.sendSingleSetup(node);
+    }
+    setTimeout(() => {
+      this.sendNodeSettings();
+    }, 1000);
+  }
+
+  async sendSingleSetup(node) {
+    const requestBody = JSON.stringify({
+      node: node.nodeId,
+      isCoordinator: node.isCoordinator,
+      isSubordinate: node.isSubordinate,
+      subordinates: node.subordinates,
+      coordinator: node.coordinator,
+    });
+
+    console.log("API POST /setup", requestBody);
+    try {
+      await apiPost(node.nodeId, "/setup", requestBody);
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
+    }
+  }
+
+  sendNodeSettings() {
+    for (let node of this.state.nodes) {
+      this.sendSingleSetting(node);
+    }
+    setTimeout(() => {
+      this.startTransaction();
+    }, 2000);
+  }
+
+  async sendSingleSetting(node) {
+    const requestBody = JSON.stringify({
+      active: true,
+      dieAfter: node.dieAfter,
+      vote: node.vote,
+    });
+
+    console.log("API POST /settings", requestBody);
+    try {
+      await apiPost(node.nodeId, "/settings", requestBody);
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
+    }
+  }
+
+  async startTransaction() {
+    let coordinator = this.state.nodes[0];
+
+    console.log("API POST /start");
+    try {
+      await apiPost(coordinator.nodeId, "/start");
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
+    }
+
+    setTimeout(() => {
+      this.getResults();
+    }, 10000);
+  }
+
+  getResults() {
+    for (let node of this.state.nodes) {
+      this.getSingleLog(node);
+    }
+    setTimeout(() => {
+      console.log("Finished");
+    }, 1000);
+  }
+
+  async getSingleLog(node) {
+    console.log("API GET /info");
+    try {
+      const logResponse = await apiGet(node.nodeId, "/info");
+      node.log = logResponse.data.filter((item) => {
+        return !item.isStatus;
+      });
+    } catch (error) {
+      alert(`Something went wrong: \n${handleError(error)}`);
+      this.back();
+    }
+  }
+
+  back() {
+    this.props.history.push(`/settings`);
+  }
+
   componentWillUnmount() {
     clearInterval(this.intervalId);
   }
@@ -79,18 +176,14 @@ class Testpanel extends Component {
     return (
       <div>
         <div className="header">
-          <Button
-            circular
-            icon="settings"
-            onClick={() => this.props.history.push(`/settings`)}
-          />
+          <Button circular icon="settings" onClick={() => this.back()} />
         </div>
         <div className="testTable">
           <Table>
             <Table.Header>
               <Table.Row>
-                {this.state.nodes
-                  ? this.state.nodes.map((node) => {
+                {this.state.nodeConfig
+                  ? this.state.nodeConfig.map((node) => {
                       return (
                         <Table.HeaderCell key={node.nodeId}>
                           {node.nodeId}
@@ -98,7 +191,7 @@ class Testpanel extends Component {
                       );
                     })
                   : ""}
-                <Table.HeaderCell>Passed</Table.HeaderCell>
+                <Table.HeaderCell>States</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
