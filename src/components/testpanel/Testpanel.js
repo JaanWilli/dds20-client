@@ -30,7 +30,7 @@ class Testpanel extends Component {
     this.intervalId = setInterval(() => {
       this.generateTestCase();
       this.sendSetups();
-    }, 20000);
+    }, 30000);
   }
 
   generateTestCase() {
@@ -139,7 +139,7 @@ class Testpanel extends Component {
 
     setTimeout(() => {
       this.getResults();
-    }, 10000);
+    }, 20000);
   }
 
   getResults() {
