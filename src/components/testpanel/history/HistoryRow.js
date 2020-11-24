@@ -1,11 +1,26 @@
 import React, { Component } from "react";
-import {Table, Label, Icon, Loader } from "semantic-ui-react";
+import {Table, Label, Icon, Loader, Progress } from "semantic-ui-react";
 
 class HistoryRow extends Component {
   state = {};
 
+  componentDidMount() {
+    this.setState({current: 0, total: 24});
+
+    this.progress = setInterval(() => {
+      if (this.state.current < this.state.total) {
+        this.setState({current: this.state.current + 1});
+      } else {
+        clearInterval(this.progress);
+      }
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.progress);
+  }
+
   getStateLabel(log) {
-    console.log(log);
     let label = "";
     for (let item of log) {
       if (item.message) {
@@ -54,7 +69,11 @@ class HistoryRow extends Component {
           </Table.Cell>
           :
           <Table.Cell>
-            <Loader active inline size="small" />
+            <Progress
+                percent={Math.round(this.state.current / this.state.total * 100)}
+                size='small'
+                indicating
+            />
           </Table.Cell>
         }
         {this.props.nodes.length > 0 && this.props.nodes[0].log.length > 0 ?

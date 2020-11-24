@@ -5,3 +5,15 @@
 .testTable table.ui.table {
   margin: 10px;
 }
+
+.ui.progress {
+  width: 300px;
+  margin: 0;
+  position: absolute;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#states {
+  min-width: 240px;
+}
