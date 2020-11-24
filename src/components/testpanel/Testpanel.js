@@ -198,6 +198,7 @@ class Testpanel extends Component {
                     })
                   : ""}
                 <Table.HeaderCell>States</Table.HeaderCell>
+                <Table.HeaderCell>Success</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
