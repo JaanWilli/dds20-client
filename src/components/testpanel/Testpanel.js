@@ -27,10 +27,15 @@ class Testpanel extends Component {
 
     this.setState({ nodeConfig: extendedNodes, history: [] });
 
-    this.intervalId = setInterval(() => {
-      this.generateTestCase();
-      this.sendSetups();
-    }, 30000);
+    this.initial = setInterval(() => {
+      this.restart()
+      clearInterval(this.initial);
+    }, 2000);
+  }
+
+  restart() {
+    this.generateTestCase();
+    this.sendSetups();
   }
 
   generateTestCase() {
@@ -148,6 +153,7 @@ class Testpanel extends Component {
     }
     setTimeout(() => {
       console.log("Finished");
+      this.restart();
     }, 1000);
   }
 
@@ -197,7 +203,7 @@ class Testpanel extends Component {
                       );
                     })
                   : ""}
-                <Table.HeaderCell>States</Table.HeaderCell>
+                <Table.HeaderCell id="states">States</Table.HeaderCell>
                 <Table.HeaderCell>Success</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
