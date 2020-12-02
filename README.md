@@ -1,35 +1,29 @@
-# 2PL Control Panel
-An own implementation of the 2PL Protocol by Davide Fontanella, Jan Willi & Remy Egloff for the UZH course "Distributed Database Systems DDBS20"
+<h1 align="center">
+  2PC-Client
+</h1>
 
-Link: https://dds20-client.herokuapp.com/
+<p align="center">
+  Front-end control panel of an own implementation of the Two Phase Commit Protocol for the UZH course "Distributed Database Systems DDBS20"
+</p>
 
-## Development
+# Demo
 
-For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
+Please find the current build under https://dds20-client.herokuapp.com/
 
-### `npm install`
+![Control Panel](public/control_panel.jpg)
 
-This has to be done before starting the application for the first time (only once).
+# How to run
 
-### `npm run dev`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console (use Google Chrome!).
-
-### `npm run test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+1. `git clone` this repository
+2. run `npm install` once
+3. `npm run dev` runs the app in development mode
+4. Navigate to [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+# How to use
+
+This client consists of three main views.
+- **Landing Page:** insert URLs of the coordinator and any desired number of nodes
+- **Control Panel:** manually run transactions with variable configurations
+- **Test Panel:** automatically run randomized tests
