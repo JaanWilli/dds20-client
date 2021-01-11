@@ -8,7 +8,7 @@
 
 # Demo
 
-Please find the current build under https://dds20-client.herokuapp.com/
+A demo playground can be found [here](http://dds.janwil.li:3000/).
 
 ![Control Panel](public/control_panel.jpg)
 
