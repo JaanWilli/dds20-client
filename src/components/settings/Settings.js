@@ -28,7 +28,7 @@ class Settings extends Component {
 
     this.setState({
       coordinator: coordinator,
-      subordinates: subordinates,
+      subordinates: subordinates
     });
     this.isOnline(coordinator.nodeId);
     for (let subordinate of subordinates) {

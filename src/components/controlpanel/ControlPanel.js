@@ -3,11 +3,17 @@ import NodeControl from "./NodeControl";
 import { Button, Icon } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import {apiPost} from "../../helpers/api";
+import { v4 as uuid } from 'uuid';
 
 class ControlPanel extends Component {
   state = {
-    random: false
+    random: false,
+    session: ""
   };
+
+  componentWillMount() {
+    this.setState({session: uuid()});
+  }
 
   back() {
     this.props.history.push(`/settings`);
@@ -32,7 +38,7 @@ class ControlPanel extends Component {
     const node = JSON.parse(localStorage.getItem("nodes"))[0];
     console.log("API POST /start");
     try {
-      await apiPost(node.nodeId, "/start");
+      await apiPost(node.nodeId, "/start?session=" + this.state.session);
     } catch (error) {
       //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -80,6 +86,7 @@ class ControlPanel extends Component {
           {nodes.map((node) => {
             return (
               <NodeControl
+                session={this.state.session}
                 nodeId={node.nodeId}
                 isCoordinator={node.isCoordinator}
                 isSubordinate={node.isSubordinate}

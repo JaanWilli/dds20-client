@@ -14,6 +14,7 @@ export async function apiPost(nodeId, path, data) {
 }
 
 export async function apiGet(nodeId, path) {
+  console.log(path)
   const promise = await axios.get(`${nodeId}${path}`, {
     headers: { "Content-Type": "application/json" },
   });

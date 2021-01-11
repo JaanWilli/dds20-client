@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 
 class NodeControl extends Component {
   state = {
+    session: this.props.session,
     nodeId: this.props.nodeId,
     isCoordinator: this.props.isCoordinator,
     isSubordinate: this.props.isSubordinate,
@@ -44,7 +45,7 @@ class NodeControl extends Component {
 
     console.log("API POST /setup", requestBody);
     try {
-      await apiPost(this.state.nodeId, "/setup", requestBody);
+      await apiPost(this.state.nodeId, "/setup?session=" + this.state.session, requestBody);
       localStorage.getItem("random")
         ? this.setRandomNodeSettings()
         : this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
@@ -58,7 +59,7 @@ class NodeControl extends Component {
     if (this.state.active) {
       console.log("API POST /start");
       try {
-        await apiPost(this.state.nodeId, "/start");
+        await apiPost(this.state.nodeId, "/start?session=" + this.state.session);
       } catch (error) {
         alert(`Something went wrong: \n${handleError(error)}`);
         this.back();
@@ -75,7 +76,7 @@ class NodeControl extends Component {
 
     console.log("API POST /settings", requestBody);
     try {
-      await apiPost(this.state.nodeId, "/settings", requestBody);
+      await apiPost(this.state.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -109,7 +110,7 @@ class NodeControl extends Component {
     });
     console.log("API POST /settings", requestBody);
     try {
-      await apiPost(this.state.nodeId, "/settings", requestBody);
+      await apiPost(this.state.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -121,7 +122,7 @@ class NodeControl extends Component {
     //get status
     console.log("API GET /status");
     try {
-      const statusResponse = await apiGet(this.state.nodeId, "/status");
+      const statusResponse = await apiGet(this.state.nodeId, "/status?session=" + this.state.session);
       console.log("Response: ", statusResponse);
       this.setState({
         active: statusResponse.data.active,
@@ -136,7 +137,7 @@ class NodeControl extends Component {
     //get log infos
     console.log("API GET /info");
     try {
-      const logResponse = await apiGet(this.state.nodeId, "/info");
+      const logResponse = await apiGet(this.state.nodeId, "/info?session=" + this.state.session);
       console.log("Response: ", logResponse);
       this.setState({ logitems: logResponse.data });
     } catch (error) {

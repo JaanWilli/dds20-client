@@ -3,12 +3,14 @@ import { withRouter } from "react-router-dom";
 import { Button, Table, Icon } from "semantic-ui-react";
 import { apiGet, apiPost, handleError } from "../../helpers/api";
 import HistoryRow from "./history/HistoryRow";
+import { v4 as uuid } from 'uuid';
 
 class Testpanel extends Component {
   state = {
     nodeConfig: [],
     nodes: [],
     history: [],
+    session: ""
   };
 
   componentDidMount() {
@@ -25,7 +27,7 @@ class Testpanel extends Component {
       log: [],
     }));
 
-    this.setState({ nodeConfig: extendedNodes, history: [] });
+    this.setState({ nodeConfig: extendedNodes, history: [], session: uuid() });
 
     this.initial = setInterval(() => {
       this.restart()
@@ -99,7 +101,7 @@ class Testpanel extends Component {
 
     console.log("API POST /setup", requestBody);
     try {
-      await apiPost(node.nodeId, "/setup", requestBody);
+      await apiPost(node.nodeId, "/setup?session=" + this.state.session, requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -124,7 +126,7 @@ class Testpanel extends Component {
 
     console.log("API POST /settings", requestBody);
     try {
-      await apiPost(node.nodeId, "/settings", requestBody);
+      await apiPost(node.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -136,7 +138,7 @@ class Testpanel extends Component {
 
     console.log("API POST /start");
     try {
-      await apiPost(coordinator.nodeId, "/start");
+      await apiPost(coordinator.nodeId, "/start?session=" + this.state.session);
     } catch (error) {
       alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
@@ -160,7 +162,7 @@ class Testpanel extends Component {
   async getSingleLog(node) {
     console.log("API GET /info");
     try {
-      const logResponse = await apiGet(node.nodeId, "/info");
+      const logResponse = await apiGet(node.nodeId, "/info?session=" + this.state.session);
       node.log = logResponse.data.filter((item) => {
         return !item.isStatus;
       });
