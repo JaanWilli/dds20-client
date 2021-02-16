@@ -50,7 +50,7 @@ class NodeControl extends Component {
         ? this.setRandomNodeSettings()
         : this.setNodeSettings(true, this.state.dieAfter, this.state.vote);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
   }
@@ -61,7 +61,7 @@ class NodeControl extends Component {
       try {
         await apiPost(this.state.nodeId, "/start?session=" + this.state.session);
       } catch (error) {
-        alert(`Something went wrong: \n${handleError(error)}`);
+        //alert(`Something went wrong: \n${handleError(error)}`);
         this.back();
       }
     }
@@ -78,7 +78,7 @@ class NodeControl extends Component {
     try {
       await apiPost(this.state.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
     this.getNodeData();
@@ -112,7 +112,7 @@ class NodeControl extends Component {
     try {
       await apiPost(this.state.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
     this.getNodeData();
@@ -130,7 +130,7 @@ class NodeControl extends Component {
         vote: statusResponse.data.vote,
       });
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
 
@@ -141,7 +141,7 @@ class NodeControl extends Component {
       console.log("Response: ", logResponse);
       this.setState({ logitems: logResponse.data });
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
   }

@@ -103,7 +103,7 @@ class Testpanel extends Component {
     try {
       await apiPost(node.nodeId, "/setup?session=" + this.state.session, requestBody);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
   }
@@ -128,7 +128,7 @@ class Testpanel extends Component {
     try {
       await apiPost(node.nodeId, "/settings?session=" + this.state.session, requestBody);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
   }
@@ -140,7 +140,7 @@ class Testpanel extends Component {
     try {
       await apiPost(coordinator.nodeId, "/start?session=" + this.state.session);
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
 
@@ -167,7 +167,7 @@ class Testpanel extends Component {
         return !item.isStatus;
       });
     } catch (error) {
-      alert(`Something went wrong: \n${handleError(error)}`);
+      //alert(`Something went wrong: \n${handleError(error)}`);
       this.back();
     }
   }

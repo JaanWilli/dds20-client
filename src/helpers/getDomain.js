@@ -7,7 +7,7 @@ import { isProduction } from "./isProduction";
  * @returns {string}
  */
 export const getDomain = () => {
-  const prodUrl = "http://dds.janwil.li/node"; // TODO: insert your groups heroku prod url for server (once deployed)
+  const prodUrl = "http://dds.janwil.li/node";
   const devUrl = "http://localhost:808";
 
   return isProduction() ? prodUrl : devUrl;
