@@ -8,7 +8,7 @@
 
 # Demo
 
-A demo playground can be found [here](http://dds.janwil.li:3000/).
+A demo playground can be found [here](https://2pc.janwil.li/).
 
 ![Control Panel](public/control_panel.jpg)
 
