@@ -1,11 +1,16 @@
 import { getDomain } from "./getDomain";
+import {isProduction} from "./isProduction";
 
 export const getConfigCoordinator = () => {
   const configCoordinator = {
-    nodeId: getDomain() + 1,
+    nodeId: isProduction()
+        ? "https://node1." + getDomain()
+        : getDomain() + 1,
     isCoordinator: true,
     isSubordinate: false,
-    subordinates: [`${getDomain()}2`, `${getDomain()}3`],
+    subordinates: isProduction()
+        ? [`https://node2.${getDomain()}`, `https://node3.${getDomain()}`]
+        : [`${getDomain()}2`, `${getDomain()}3`],
     coordinator: "",
   };
 
@@ -15,18 +20,26 @@ export const getConfigCoordinator = () => {
 export const getConfigSubordinates = () => {
   const configSubordinates = [
     {
-      nodeId: getDomain() + 2,
+      nodeId: isProduction()
+          ? "https://node2." + getDomain()
+          : getDomain() + 2,
       isCoordinator: false,
       isSubordinate: true,
       subordinates: [],
-      coordinator: `${getDomain()}1`,
+      coordinator: isProduction()
+          ? `https://node1.${getDomain()}`
+          : `${getDomain()}1`,
     },
     {
-      nodeId: getDomain() + 3,
+      nodeId: isProduction()
+          ? "https://node3." + getDomain()
+          : getDomain() + 3,
       isCoordinator: false,
       isSubordinate: true,
       subordinates: [],
-      coordinator: `${getDomain()}1`,
+      coordinator: isProduction()
+          ? `https://node1.${getDomain()}`
+          : `${getDomain()}1`,
     },
   ];
 

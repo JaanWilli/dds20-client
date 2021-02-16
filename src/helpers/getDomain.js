@@ -7,7 +7,7 @@ import { isProduction } from "./isProduction";
  * @returns {string}
  */
 export const getDomain = () => {
-  const prodUrl = "http://dds.janwil.li/node";
+  const prodUrl = "2pc.janwil.li";
   const devUrl = "http://localhost:808";
 
   return isProduction() ? prodUrl : devUrl;
